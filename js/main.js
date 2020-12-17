@@ -13,7 +13,7 @@ class AmongUsCharacter {
         this.directionX = obj.directionX;
         this.directionY = obj.directionY;
         this.numberImage = obj.numberImage;
-        this.src = `../ressources/character-among-us-${this.numberImage < 10 ? `0${this.numberImage}`: this.numberImage}.png`;
+        this.src = `ressources/character-among-us-${this.numberImage < 10 ? `0${this.numberImage}`: this.numberImage}.png`;
     }
 
     createImage() {
