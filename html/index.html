@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejector Among Us</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+
+        <div class="form-container">
+            <h1>Ejector Among Us</h1>
+            <form action="/ejector.html" method="GET">
+                <input type="text" name="name" id="name" placeholder="Nom">
+                <input type="text" id="ejection-message" name="ejection-message" placeholder="Message d'éjection">
+                <input type="text" id="end-message" name="end-message" placeholder="Message de fin">
+                <button type="submit">VALIDER</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/canvas.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
