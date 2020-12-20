@@ -12,12 +12,24 @@
 
         <div class="form-container">
             <h1>Ejector Among Us</h1>
-            <form action="/ejector.html" method="GET">
+            <form id="ejector-form" action="./html/ejector.html" method="GET">
                 <input type="text" name="name" id="name" placeholder="Nom">
-                <input type="text" id="ejection-message" name="ejection-message" placeholder="Message d'éjection">
-                <input type="text" id="end-message" name="end-message" placeholder="Message de fin">
+                <input type="text" id="ejection-message" name="ejectionMessage" placeholder="Message d'éjection">
+                <input type="text" id="end-message" name="endMessage" placeholder="Message de fin">
                 <button type="submit">VALIDER</button>
             </form>
+        </div>
+
+        <div class="message-container">
+            <div class="ejection-message"></div>
+            <div class="end-message"></div>
+        </div>
+
+        <div class="play-again">
+            <ul>
+                <li class="animate-again">relancer l'animation</li>
+                <li class="homepage">page d'accueil</li>
+            </ul>
         </div>
     </div>
 
