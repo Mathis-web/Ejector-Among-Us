@@ -6,6 +6,7 @@ const positionY = [0, window.innerHeight];
 let idAnimation;
 let isMessageDisplayed = false;
 let ejectionMessageValue, endMessageValue;
+let createCharacterTimeout;
 
 const form = document.getElementById('ejector-form');
 form.addEventListener('submit', ejectorPage);
@@ -22,6 +23,7 @@ class AmongUsCharacter {
         this.directionX = obj.directionX;
         this.directionY = obj.directionY;
         this.numberImage = obj.numberImage;
+        this.width = obj.width;
         this.src = `ressources/character-among-us-${this.numberImage < 10 ? `0${this.numberImage}`: this.numberImage}.png`;
     }
 
@@ -32,6 +34,7 @@ class AmongUsCharacter {
         img.alt = this.alt;
         img.style.left = `${this.x}px`;
         img.style.top = `${this.y}px`;
+        img.style.width = `${this.width}px`;
         img.id = AmongUsCharacter.numberCharacter;
         AmongUsCharacter.numberCharacter++;
         return img;
@@ -47,13 +50,12 @@ class AmongUsCharacter {
             }
             if (this.x > window.innerWidth) {
                 character.remove();
-                document.querySelector('.play-again').style.display = "block";
+                // setTimeout(() => document.querySelector('.play-again').style.display = "block", 2100)
                 return;
             }
             if(this.x > messageContainer.offsetLeft && !isMessageDisplayed) {
                 isMessageDisplayed = true;
                 displayMessage(ejectionMessageValue, endMessageValue)
-                console.log(ejectionMessageValue, endMessageValue)
             }
             this.x += this.directionX * this.speed; 
             this.y += this.directionY * this.speed;
@@ -92,19 +94,25 @@ class AmongUsCharacter {
 }
 
 function createCharacter() {
+    let width;
+    window.innerWidth > 650 ? width = 60 : width = 45;
     const character = new AmongUsCharacter({
         id: AmongUsCharacter.numberCharacter,
         x: positionX[Math.floor(getRandomNumber(0, 2))],
         y: positionY[Math.floor(getRandomNumber(0, 2))],
         directionX: Math.random() * 0.2 - 0.1,
         directionY: Math.random() * 0.2 - 0.1,
-        speed: 35,
+        speed: 15,
+        width: width,
         numberImage: Math.floor(getRandomNumber(1, 10))
     })
     
     const characterImg = character.createImage();
     container.appendChild(characterImg);
-    animationCharacter(character)
+    animationCharacter(character);
+
+    const randomNumber = getRandomNumber(2, 7);
+    createCharacterTimeout = setTimeout(createCharacter, randomNumber * 1000)
 }
 
 function animationCharacter(character) {
@@ -115,7 +123,6 @@ function animationCharacter(character) {
 }
 
 createCharacter();
-let ejectCharacter = setInterval(createCharacter, 2500);
 
 // Ejector page
 
@@ -126,7 +133,7 @@ const ejectionMessage = document.querySelector('.ejection-message');
 
 function ejectorPage(e) {
     e.preventDefault();
-    clearInterval(ejectCharacter);
+    clearTimeout(createCharacterTimeout);
     cancelAnimationFrame(idAnimation)
     document.querySelectorAll('.among-us').forEach(perso => perso.remove());
     document.querySelector('.form-container').style.display = "none";
@@ -138,7 +145,6 @@ function ejectorPage(e) {
 }
 
 function displayMessage(firstMessage, secondMessage) {
-    console.log('bonjour')
     if (count < firstMessage.length) {
         ejectionMessage.textContent += firstMessage.charAt(count);
         count++;
@@ -148,19 +154,29 @@ function displayMessage(firstMessage, secondMessage) {
     } else {
         setTimeout(() => {
             endMessage.textContent = secondMessage;
-            endMessage.classList.add('scale-animation')
-        }, 500)
+            endMessage.classList.add('scale-animation');
+            setTimeout(() => document.querySelector('.play-again').style.display = "block", 1500)
+        }, 800)
     }
 }
 
 function ejectedCharacter() {
+    let speed, width;
+    if(window.innerWidth < 600) {
+        speed = 2;
+        width = 45;
+    } else {
+        speed = 4;
+        width = 60;
+    }
     const ejectedCharacter = new AmongUsCharacter({
         id: 'ejected-character',
         x: -40,
-        y: window.innerHeight / 2 - 60,
+        y: window.innerHeight / 2 - 40,
         directionX: 1,
         directionY: 0,
-        speed: 4,
+        speed: speed,
+        width: width,
         numberImage: Math.floor(getRandomNumber(1, 10))
     })
 
@@ -172,27 +188,39 @@ function ejectedCharacter() {
     }, 1000)
 }
 
+function reset() {
+    document.querySelector('.play-again').style.display = "none";
+    document.querySelector('.end-message').textContent = "";
+    document.querySelector('.end-message').classList.remove('scale-animation');
+    document.querySelector('.ejection-message').textContent = "";
+    isMessageDisplayed = false;
+    count = 0;
+}
+
 const playAgain = document.querySelector('.animate-again');
 const homepage = document.querySelector('.homepage');
 
 homepage.addEventListener('click', () => {
-    document.querySelector('.end-message').textContent = "";
-    document.querySelector('.ejection-message').textContent = "";
-    document.querySelector('.end-message').classList.remove('scale-animation');
+    reset();
     document.querySelector('.form-container').style.display = 'block';
-    document.querySelector('.play-again').style.display = "none";
-    isMessageDisplayed = false;
-    count = 0;
-    ejectCharacter = setInterval(createCharacter, 2500);
+    createCharacter();
 })
 
 playAgain.addEventListener('click', () => {
-    document.querySelector('.play-again').style.display = "none";
-    document.querySelector('.end-message').textContent = "";
-    document.querySelector('.ejection-message').textContent = "";
-    document.querySelector('.end-message').classList.remove('scale-animation');
-    isMessageDisplayed = false;
-    count = 0;
+    reset();
     ejectedCharacter();
 })
 
+function resize() {
+    cancelAnimationFrame(particulesAnimation);
+    init();
+}
+
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resize, 400); 
+    ctx.canvas.width = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
+})

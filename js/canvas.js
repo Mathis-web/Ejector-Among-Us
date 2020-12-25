@@ -1,10 +1,10 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+let particulesAnimation;
+let arrayParticules = [];
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
-
-let arrayParticules = [];
-const numberOfParticules = 100;
+let numberOfParticules = 0;
 
 class Particule {
     constructor(obj) {
@@ -30,11 +30,18 @@ class Particule {
 }
 
 function init() {
+    if(window.innerWidth > 1000) {
+        numberOfParticules = 90;
+    } else {
+        numberOfParticules = 30;
+    }
+    console.log(CSSStyleSheet)
+    arrayParticules = [];
     for (let i =0; i < numberOfParticules; i++) {
-        const size = getRandomNumber(0.5, 5);
+        const size = getRandomNumber(0.4, 3.3);
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
-        const speed = getRandomNumber(0.4, 1.5);
+        const speed = getRandomNumber(0.2, 1.2);
         const color = `rgba(255,255,255, ${getRandomNumber(0.3, 1)})`;
         arrayParticules.push(new Particule({size, x, y, speed, color}))
     }
@@ -43,7 +50,7 @@ function init() {
 }
 
 function animation() {
-    requestAnimationFrame(animation)
+    particulesAnimation = requestAnimationFrame(animation);
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
     arrayParticules.forEach(particule => particule.move());
 }
