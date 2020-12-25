@@ -170,7 +170,7 @@ button {
     form {font-size: 1.4rem}
 }
 
-@media all and (max-width: 400px) {
+@media all and (max-width: 500px) {
     .message-container{width: 88%}
     .animate-again {font-size: 1.3rem}
 }
