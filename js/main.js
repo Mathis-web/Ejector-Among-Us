@@ -141,7 +141,7 @@ function ejectorPage(e) {
     ejectionMessageValue = form.name.value + ' ' + form.ejectionMessage.value;
     endMessageValue = form.endMessage.value;
 
-    ejectedCharacter();
+   setTimeout(() =>  ejectedCharacter(), 700)
 }
 
 function displayMessage(firstMessage, secondMessage) {
@@ -220,7 +220,7 @@ let resizeTimeout;
 window.addEventListener('resize', () => {
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(resize, 400); 
+    resizeTimeout = setTimeout(resize, 100); 
     ctx.canvas.width = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
 })
